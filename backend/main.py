@@ -19,6 +19,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 @app.get("/")
 def home():
     return {"message": "DocuMind AI está funcionando!"}
@@ -55,6 +56,7 @@ async def extract_pdf(file: UploadFile = File(...)):
         text = "\n".join(
             page.get_text() for page in document
         )
+
         document.close()
 
         if not text.strip():
@@ -127,7 +129,9 @@ async def summarize_document(request: SummaryRequest):
             "summary": summary
         }
 
-    except Exception:
+    except Exception as e:
+        print("ERRO GEMINI:", repr(e))
+
         raise HTTPException(
             status_code=502,
             detail="Não foi possível gerar o resumo com o Gemini."
