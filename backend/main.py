@@ -107,7 +107,7 @@ async def summarize_document(request: SummaryRequest):
         client = genai.Client(api_key=api_key)
 
         response = client.models.generate_content(
-            model="gemini-2.5-flash",
+            model="gemini-3.8-flash",
             contents=(
                 "Você é o assistente de análise de documentos "
                 "do DocuMind AI. Faça um resumo claro e organizado "
