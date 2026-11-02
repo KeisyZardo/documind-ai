@@ -36,7 +36,7 @@ class SummaryRequest(BaseModel):
 @app.post("/api/extract")
 async def extract_pdf(file: UploadFile = File(...)):
 
-    if not file.filename.lower().endswith(".pdf"):
+    if not file.filename or not file.filename.lower().endswith(".pdf"):
         raise HTTPException(
             status_code=400,
             detail="Envie um arquivo PDF."
@@ -115,12 +115,27 @@ async def summarize_document(request: SummaryRequest):
         client = genai.Client(api_key=api_key)
 
         prompt = (
-            "Você é o assistente de análise de documentos "
-            "do DocuMind AI. Faça um resumo claro e organizado "
-            "em português do Brasil. Apresente o tema central, "
-            "os pontos mais importantes e uma conclusão. "
-            "Não invente informações que não estejam no texto.\n\n"
-            f"Nome do documento: {request.filename}\n\n"
+            "Você é o assistente de análise de documentos do DocuMind AI. "
+            "Produza um resumo objetivo, equilibrado e fácil de entender.\n\n"
+
+            "ESTRUTURA OBRIGATÓRIA:\n"
+            "1. TEMA CENTRAL: explique o assunto em até 2 frases.\n"
+            "2. PONTOS PRINCIPAIS: apresente de 3 a 5 tópicos "
+            "com as informações essenciais.\n"
+            "3. CONCLUSÃO: finalize em até 2 frases.\n\n"
+
+            "REGRAS:\n"
+            "- Escreva aproximadamente 100 a 150 palavras no total.\n"
+            "- Seja direto e evite explicações longas.\n"
+            "- Elimine repetições e detalhes secundários.\n"
+            "- Preserve os fatos mais importantes.\n"
+            "- Não invente informações.\n"
+            "- Não reproduza CPF, e-mail, telefone ou endereço, "
+            "a menos que sejam indispensáveis para compreender o documento.\n"
+            "- Não revele dados pessoais desnecessariamente.\n"
+            "- Responda em português do Brasil.\n\n"
+
+            f"Documento: {request.filename}\n\n"
             f"Conteúdo:\n{request.text}"
         )
 
@@ -133,7 +148,10 @@ async def summarize_document(request: SummaryRequest):
                 response = await asyncio.to_thread(
                     client.models.generate_content,
                     model="gemini-3.8-flash",
-                    contents=prompt
+                    contents=prompt,
+                    config={
+                        "max_output_tokens": 500
+                    }
                 )
 
                 break
