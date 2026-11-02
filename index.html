@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -6,25 +7,86 @@
 <title>DocuMind AI — Seu espaço inteligente</title>
 <style>
 :root{color-scheme:dark;--bg:#0b0c14;--panel:#141624;--line:#292b40;--muted:#a1a2b7;--purple:#a78bfa;--blue:#4c78e8}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#f7f6ff;font-family:Inter,system-ui,Arial,sans-serif}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:#f7f6ff;font-family:Inter,system-ui,Arial,sans-serif}
 header{height:76px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 5%;position:sticky;top:0;background:#0b0c14ee;backdrop-filter:blur(12px);z-index:2}
-.brand{display:flex;align-items:center;gap:12px;font-weight:800;font-size:19px;letter-spacing:.2px}.logo{height:42px;width:42px;border-radius:13px;background:linear-gradient(135deg,#7655ef,#3679db);display:grid;place-items:center;font-size:23px}.brand span{color:var(--purple)}
+.brand{display:flex;align-items:center;gap:12px;font-weight:800;font-size:19px;letter-spacing:.2px}
+.logo{height:42px;width:42px;border-radius:13px;background:linear-gradient(135deg,#7655ef,#3679db);display:grid;place-items:center;font-size:23px}
+.brand span{color:var(--purple)}
 .pill{border:1px solid #484065;color:#c5b4ff;background:#211d34;padding:8px 13px;border-radius:30px;font-size:12px}
-.layout{display:grid;grid-template-columns:225px 1fr;min-height:calc(100vh - 76px)}aside{border-right:1px solid var(--line);padding:26px 16px}.eyebrow{font-size:10px;letter-spacing:1.7px;color:#85869c;font-weight:700;margin:0 12px 12px}.nav{display:block;width:100%;padding:12px;border:0;background:transparent;color:#aaaabd;text-align:left;border-radius:9px;margin:3px 0;font-size:14px;cursor:pointer}.nav.active,.nav:hover{background:#28233f;color:#d3c5ff}.side-note{margin-top:40px;background:#171626;border:1px solid var(--line);border-radius:13px;padding:15px;font-size:13px;line-height:1.5}.side-note small{color:var(--muted)}
-main{padding:46px clamp(20px,5vw,70px);max-width:1250px;width:100%;margin:auto}.intro-tag{color:#b6a2ff;font-size:12px;letter-spacing:1.8px;font-weight:700}.intro h1{font-size:clamp(34px,5vw,54px);line-height:1.08;letter-spacing:-1.7px;margin:13px 0}.intro h1 span{color:var(--purple)}.intro p,.muted{color:var(--muted);line-height:1.6}.intro p{font-size:15px;margin-bottom:30px}
-.panel{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:24px}.panel h2{font-size:19px;margin:0 0 6px}.panel>p{font-size:13px;margin:0 0 20px}.drop{display:flex;flex-direction:column;align-items:center;text-align:center;padding:37px 15px;border:1px dashed #69618e;background:#19192a;border-radius:13px;cursor:pointer;transition:.2s}.drop:hover,.drop.drag{border-color:#b49aff;background:#211e35}.drop .symbol{font-size:38px;margin-bottom:12px}.drop strong{font-size:15px}.drop small{color:var(--muted);margin-top:8px}input[type=file]{display:none}
-.actions{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:18px}.btn{border:0;border-radius:10px;padding:12px 17px;background:linear-gradient(110deg,#7655ef,#4c78e8);color:white;font-weight:700;cursor:pointer}.btn:disabled{opacity:.4;cursor:not-allowed}.status{font-size:12px;color:var(--muted)}.filebox{display:none;align-items:center;justify-content:space-between;gap:12px;padding:13px;margin-top:13px;background:#10111d;border:1px solid var(--line);border-radius:11px}.filebox.show{display:flex}.filename{font-size:13px;font-weight:700;overflow-wrap:anywhere}.filesize{font-size:11px;color:var(--muted);margin-top:4px}.remove{border:0;background:transparent;color:#f39aab;cursor:pointer}.result{display:none;margin-top:16px;padding:16px;border-radius:12px;background:#211d34;border:1px solid #51447b;font-size:13px;line-height:1.6}.result.show{display:block}.result strong{color:#c5b2ff}
+.layout{display:grid;grid-template-columns:225px 1fr;min-height:calc(100vh - 76px)}
+aside{border-right:1px solid var(--line);padding:26px 16px}
+.eyebrow{font-size:10px;letter-spacing:1.7px;color:#85869c;font-weight:700;margin:0 12px 12px}
+.nav{display:block;width:100%;padding:12px;border:0;background:transparent;color:#aaaabd;text-align:left;border-radius:9px;margin:3px 0;font-size:14px;cursor:pointer}
+.nav.active,.nav:hover{background:#28233f;color:#d3c5ff}
+.side-note{margin-top:40px;background:#171626;border:1px solid var(--line);border-radius:13px;padding:15px;font-size:13px;line-height:1.5}
+.side-note small{color:var(--muted)}
+main{padding:46px clamp(20px,5vw,70px);max-width:1250px;width:100%;margin:auto}
+.intro-tag{color:#b6a2ff;font-size:12px;letter-spacing:1.8px;font-weight:700}
+.intro h1{font-size:clamp(34px,5vw,54px);line-height:1.08;letter-spacing:-1.7px;margin:13px 0}
+.intro h1 span{color:var(--purple)}
+.intro p,.muted{color:var(--muted);line-height:1.6}
+.intro p{font-size:15px;margin-bottom:30px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:24px}
+.panel h2{font-size:19px;margin:0 0 6px}
+.panel>p{font-size:13px;margin:0 0 20px}
+.drop{display:flex;flex-direction:column;align-items:center;text-align:center;padding:37px 15px;border:1px dashed #69618e;background:#19192a;border-radius:13px;cursor:pointer;transition:.2s}
+.drop:hover,.drop.drag{border-color:#b49aff;background:#211e35}
+.drop .symbol{font-size:38px;margin-bottom:12px}
+.drop strong{font-size:15px}
+.drop small{color:var(--muted);margin-top:8px}
+input[type=file]{display:none}
+.actions{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:18px}
+.btn{border:0;border-radius:10px;padding:12px 17px;background:linear-gradient(110deg,#7655ef,#4c78e8);color:white;font-weight:700;cursor:pointer}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.status{font-size:12px;color:var(--muted)}
+.filebox{display:none;align-items:center;justify-content:space-between;gap:12px;padding:13px;margin-top:13px;background:#10111d;border:1px solid var(--line);border-radius:11px}
+.filebox.show{display:flex}
+.filename{font-size:13px;font-weight:700;overflow-wrap:anywhere}
+.filesize{font-size:11px;color:var(--muted);margin-top:4px}
+.remove{border:0;background:transparent;color:#f39aab;cursor:pointer}
+.result{display:none;margin-top:16px;padding:16px;border-radius:12px;background:#211d34;border:1px solid #51447b;font-size:13px;line-height:1.6}
+.result.show{display:block}
+.result strong{color:#c5b2ff}
 .extracted-text-box{margin-top:12px;padding:12px;background:#10111d;border:1px solid var(--line);border-radius:8px;max-height:300px;overflow-y:auto;white-space:pre-wrap;word-break:break-word;font-family:monospace,sans-serif;font-size:12px;color:#e2e0ff}
 .summary-box{margin-top:12px;padding:15px;background:#171626;border:1px solid #51447b;border-radius:10px;white-space:pre-wrap;word-break:break-word;color:#f0edff;line-height:1.7}
-.features{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-top:17px}.feature{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:19px}.feature .icon{font-size:25px;margin-bottom:12px}.feature b{font-size:14px}.feature p{font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:0}
-.view{display:none}.view.active{display:block}.view-title{font-size:27px;margin:0 0 8px}.docrow{padding:15px;border:1px solid var(--line);border-radius:11px;background:#10111d;font-size:13px}
-.chatbox{border:1px solid var(--line);border-radius:15px;padding:18px;background:var(--panel)}.bubble{padding:13px;border-radius:11px;background:#202036;font-size:13px;line-height:1.6;margin-bottom:10px}.bubble.user{background:#292342}.chatform{display:flex;gap:9px;margin-top:16px}.chatform input{flex:1;min-width:0;background:#0d0e18;border:1px solid #35364d;border-radius:9px;padding:12px;color:white}
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-top:17px}
+.feature{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:19px}
+.feature .icon{font-size:25px;margin-bottom:12px}
+.feature b{font-size:14px}
+.feature p{font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:0}
+.view{display:none}
+.view.active{display:block}
+.view-title{font-size:27px;margin:0 0 8px}
+.docrow{padding:15px;border:1px solid var(--line);border-radius:11px;background:#10111d;font-size:13px}
+.chatbox{border:1px solid var(--line);border-radius:15px;padding:18px;background:var(--panel)}
+.bubble{padding:13px;border-radius:11px;background:#202036;font-size:13px;line-height:1.6;margin-bottom:10px}
+.bubble.user{background:#292342}
+.chatform{display:flex;gap:9px;margin-top:16px}
+.chatform input{flex:1;min-width:0;background:#0d0e18;border:1px solid #35364d;border-radius:9px;padding:12px;color:white}
 footer{border-top:1px solid var(--line);margin-top:45px;padding-top:17px;color:#85869c;font-size:11px}
-@media(max-width:760px){.layout{grid-template-columns:1fr}aside{border-right:0;border-bottom:1px solid var(--line);padding:12px;display:flex;gap:6px;overflow-x:auto}.eyebrow,.side-note{display:none}.nav{white-space:nowrap;width:auto;padding:10px 13px}main{padding:30px 17px}.features{grid-template-columns:1fr}.panel{padding:17px}header{padding:0 17px}}
+@media(max-width:760px){
+.layout{grid-template-columns:1fr}
+aside{border-right:0;border-bottom:1px solid var(--line);padding:12px;display:flex;gap:6px;overflow-x:auto}
+.eyebrow,.side-note{display:none}
+.nav{white-space:nowrap;width:auto;padding:10px 13px}
+main{padding:30px 17px}
+.features{grid-template-columns:1fr}
+.panel{padding:17px}
+header{padding:0 17px}
+}
 </style>
 </head>
 <body>
-<header><div class="brand"><div class="logo">✦</div><div>DocuMind <span>AI</span></div></div><div class="pill">● Protótipo interativo</div></header>
+
+<header>
+<div class="brand">
+<div class="logo">✦</div>
+<div>DocuMind <span>AI</span></div>
+</div>
+<div class="pill">● Protótipo interativo</div>
+</header>
+
 <div class="layout">
 <aside>
 <p class="eyebrow">WORKSPACE</p>
@@ -33,72 +95,195 @@ footer{border-top:1px solid var(--line);margin-top:45px;padding-top:17px;color:#
 <button class="nav" data-view="chat">✧ &nbsp; Conversar com IA</button>
 <div class="side-note">✦ <b>DocuMind Pro</b><br><small>Sua central inteligente de documentos.</small></div>
 </aside>
+
 <main>
 <section class="view active" id="home">
-<div class="intro"><div class="intro-tag">SUA CENTRAL DE CONHECIMENTO</div><h1>Seus documentos.<br><span>Mais inteligentes.</span></h1><p>Envie um PDF e explore uma nova maneira de trabalhar com informações.</p></div>
-<div class="panel"><h2>Comece por aqui</h2><p class="muted">Selecione um documento PDF para começar.</p>
-<label class="drop" id="drop" for="file"><span class="symbol">📄</span><strong>Arraste seu PDF ou clique para selecionar</strong><small>PDF • Até 10 MB</small><input id="file" type="file" accept=".pdf,application/pdf"></label>
-<div class="filebox" id="filebox"><div><div class="filename" id="filename"></div><div class="filesize" id="filesize"></div></div><button class="remove" id="remove">Remover ✕</button></div>
-<div class="actions"><button class="btn" id="analyze" disabled>✦ Analisar documento</button><span class="status" id="status">Aguardando documento…</span></div>
+<div class="intro">
+<div class="intro-tag">SUA CENTRAL DE CONHECIMENTO</div>
+<h1>Seus documentos.<br><span>Mais inteligentes.</span></h1>
+<p>Envie um PDF e explore uma nova maneira de trabalhar com informações.</p>
+</div>
+
+<div class="panel">
+<h2>Comece por aqui</h2>
+<p class="muted">Selecione um documento PDF para começar.</p>
+
+<label class="drop" id="drop" for="file">
+<span class="symbol">📄</span>
+<strong>Arraste seu PDF ou clique para selecionar</strong>
+<small>PDF • Até 10 MB • Até 10 páginas</small>
+<input id="file" type="file" accept=".pdf,application/pdf">
+</label>
+
+<div class="filebox" id="filebox">
+<div>
+<div class="filename" id="filename"></div>
+<div class="filesize" id="filesize"></div>
+</div>
+<button class="remove" id="remove">Remover ✕</button>
+</div>
+
+<div class="actions">
+<button class="btn" id="analyze" disabled>✦ Analisar documento</button>
+<span class="status" id="status">Aguardando documento…</span>
+</div>
 <div class="result" id="result"></div>
 </div>
-<div class="features"><div class="feature"><div class="icon">🧠</div><b>Resumos inteligentes</b><p>Transforme documentos extensos em resumos objetivos.</p></div><div class="feature"><div class="icon">💬</div><b>Pergunte ao PDF</b><p>Encontre respostas usando o conteúdo dos arquivos.</p></div><div class="feature"><div class="icon">🔎</div><b>Extração de dados</b><p>Localize informações importantes com facilidade.</p></div></div>
+
+<div class="features">
+<div class="feature"><div class="icon">🧠</div><b>Resumos inteligentes</b><p>Transforme documentos extensos em resumos objetivos.</p></div>
+<div class="feature"><div class="icon">💬</div><b>Pergunte ao PDF</b><p>Encontre respostas usando o conteúdo dos arquivos.</p></div>
+<div class="feature"><div class="icon">🔎</div><b>Extração de dados</b><p>Localize informações importantes com facilidade.</p></div>
+</div>
 </section>
-<section class="view" id="documents"><h1 class="view-title">Meus documentos</h1><p class="muted">Arquivos selecionados nesta sessão.</p><div class="docrow" id="doclist">Nenhum documento selecionado ainda.</div><button class="btn" style="margin-top:16px" onclick="showView('home')">＋ Adicionar documento</button></section>
-<section class="view" id="chat"><h1 class="view-title">Conversar com IA</h1><p class="muted">Faça perguntas sobre seu documento.</p><div class="chatbox"><div id="messages"><div class="bubble">✦ Olá! Quando a IA estiver conectada, você poderá conversar com seus documentos por aqui.</div></div><form class="chatform" id="chatform"><input id="question" placeholder="Digite sua pergunta…" autocomplete="off"><button class="btn">Enviar</button></form><p class="muted" style="font-size:11px;margin-bottom:0">Modo demonstração — respostas reais ainda não estão conectadas.</p></div></section>
+
+<section class="view" id="documents">
+<h1 class="view-title">Meus documentos</h1>
+<p class="muted">Arquivos selecionados nesta sessão.</p>
+<div class="docrow" id="doclist">Nenhum documento selecionado ainda.</div>
+<button class="btn" style="margin-top:16px" onclick="showView('home')">＋ Adicionar documento</button>
+</section>
+
+<section class="view" id="chat">
+<h1 class="view-title">Conversar com IA</h1>
+<p class="muted">Faça perguntas sobre seu documento.</p>
+<div class="chatbox">
+<div id="messages">
+<div class="bubble">✦ Olá! Quando a IA estiver conectada, você poderá conversar com seus documentos por aqui.</div>
+</div>
+<form class="chatform" id="chatform">
+<input id="question" placeholder="Digite sua pergunta…" autocomplete="off">
+<button class="btn">Enviar</button>
+</form>
+<p class="muted" style="font-size:11px;margin-bottom:0">Modo demonstração — respostas reais ainda não estão conectadas.</p>
+</div>
+</section>
+
 <footer>DocuMind AI · Projeto de portfólio · Versão demonstrativa</footer>
-</main></div>
+</main>
+</div>
+
 <script>
 const API_URL = 'https://documind-ai-9lbi.onrender.com/api/extract';
 const SUMMARY_URL = 'https://documind-ai-9lbi.onrender.com/api/summarize';
-const $=id=>document.getElementById(id);let selectedFile=null;
-let isProcessing=false;
 
-function showView(name){document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id===name));document.querySelectorAll('.nav').forEach(b=>b.classList.toggle('active',b.dataset.view===name))}
-document.querySelectorAll('.nav').forEach(b=>b.addEventListener('click',()=>showView(b.dataset.view)));
+const $ = id => document.getElementById(id);
 
-function chooseFile(f){
-  if(isProcessing) return;
-  if(!f)return;
-  if(f.type!=='application/pdf'&&!f.name.toLowerCase().endsWith('.pdf')){$('status').textContent='Selecione um arquivo PDF válido.';return}
-  if(f.size>10*1024*1024){$('status').textContent='O arquivo ultrapassa o limite de 10 MB.';return}
-  if(!f.size){$('status').textContent='O arquivo selecionado está vazio.';return}
-  selectedFile=f;
-  $('filename').textContent=f.name;
-  $('filesize').textContent=(f.size/1024/1024).toFixed(2)+' MB';
-  $('filebox').classList.add('show');
-  $('analyze').disabled=false;
-  $('status').textContent='Documento pronto para análise.';
-  $('result').classList.remove('show');
-  $('result').innerHTML='';
-  $('doclist').textContent=f.name+' · '+(f.size/1024/1024).toFixed(2)+' MB'
+let selectedFile = null;
+let isProcessing = false;
+
+function showView(name) {
+  document.querySelectorAll('.view').forEach(v =>
+    v.classList.toggle('active', v.id === name)
+  );
+
+  document.querySelectorAll('.nav').forEach(b =>
+    b.classList.toggle('active', b.dataset.view === name)
+  );
 }
 
-$('file').addEventListener('change',e=>chooseFile(e.target.files[0]));
-$('remove').addEventListener('click',()=>{
-  if(isProcessing) return;
-  selectedFile=null;
-  $('file').value='';
-  $('filebox').classList.remove('show');
-  $('analyze').disabled=true;
-  $('status').textContent='Aguardando documento…';
+document.querySelectorAll('.nav').forEach(b =>
+  b.addEventListener('click', () => showView(b.dataset.view))
+);
+
+function showError(message) {
+  $('result').innerHTML = '';
+
+  const title = document.createElement('strong');
+  title.style.color = '#f39aab';
+  title.textContent = 'Não foi possível concluir a análise:';
+
+  const description = document.createElement('p');
+  description.textContent = message;
+
+  $('result').append(title, document.createElement('br'), description);
+  $('result').classList.add('show');
+  $('status').textContent = 'Erro no processamento.';
+}
+
+function chooseFile(file) {
+  if (isProcessing || !file) return;
+
+  if (file.type !== 'application/pdf' &&
+      !file.name.toLowerCase().endsWith('.pdf')) {
+    $('status').textContent = 'Selecione um arquivo PDF válido.';
+    return;
+  }
+
+  if (file.size > 10 * 1024 * 1024) {
+    $('status').textContent = 'O arquivo ultrapassa o limite de 10 MB.';
+    return;
+  }
+
+  if (!file.size) {
+    $('status').textContent = 'O arquivo selecionado está vazio.';
+    return;
+  }
+
+  selectedFile = file;
+
+  $('filename').textContent = file.name;
+  $('filesize').textContent =
+    (file.size / 1024 / 1024).toFixed(2) + ' MB';
+
+  $('filebox').classList.add('show');
+  $('analyze').disabled = false;
+  $('status').textContent = 'Documento pronto para análise.';
+
   $('result').classList.remove('show');
-  $('result').innerHTML='';
-  $('doclist').textContent='Nenhum documento selecionado ainda.'
+  $('result').innerHTML = '';
+
+  $('doclist').textContent =
+    file.name + ' · ' + (file.size / 1024 / 1024).toFixed(2) + ' MB';
+}
+
+$('file').addEventListener('change', e =>
+  chooseFile(e.target.files[0])
+);
+
+$('remove').addEventListener('click', () => {
+  if (isProcessing) return;
+
+  selectedFile = null;
+  $('file').value = '';
+  $('filebox').classList.remove('show');
+  $('analyze').disabled = true;
+  $('status').textContent = 'Aguardando documento…';
+  $('result').classList.remove('show');
+  $('result').innerHTML = '';
+  $('doclist').textContent = 'Nenhum documento selecionado ainda.';
 });
 
-const drop=$('drop');
-['dragenter','dragover'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();if(!isProcessing)drop.classList.add('drag')}));
-['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove('drag')}));
-drop.addEventListener('drop',e=>{if(!isProcessing)chooseFile(e.dataTransfer.files[0])});
+const drop = $('drop');
 
-$('analyze').addEventListener('click', async ()=>{
-  if(!selectedFile || isProcessing) return;
+['dragenter', 'dragover'].forEach(eventName => {
+  drop.addEventListener(eventName, e => {
+    e.preventDefault();
+    if (!isProcessing) drop.classList.add('drag');
+  });
+});
+
+['dragleave', 'drop'].forEach(eventName => {
+  drop.addEventListener(eventName, e => {
+    e.preventDefault();
+    drop.classList.remove('drag');
+  });
+});
+
+drop.addEventListener('drop', e => {
+  if (!isProcessing) chooseFile(e.dataTransfer.files[0]);
+});
+
+$('analyze').addEventListener('click', async () => {
+  if (!selectedFile || isProcessing) return;
 
   isProcessing = true;
   $('analyze').disabled = true;
   $('remove').disabled = true;
-  $('status').textContent = 'Enviando PDF para extração... O servidor pode levar alguns instantes para iniciar.';
+
+  $('status').textContent =
+    'Enviando PDF para extração... O servidor pode levar alguns instantes para iniciar.';
+
   $('result').classList.remove('show');
   $('result').innerHTML = '';
 
@@ -106,117 +291,133 @@ $('analyze').addEventListener('click', async ()=>{
   formData.append('file', selectedFile);
 
   try {
-    // Etapa 1: extrair o texto do PDF
+    // ETAPA 1: EXTRAÇÃO DO PDF
+
     const response = await fetch(API_URL, {
       method: 'POST',
       body: formData
     });
 
-    if(!response.ok) {
-      let errorMsg = `Erro ao extrair o PDF (${response.status} ${response.statusText})`;
+    if (!response.ok) {
+      let message = `Erro ao extrair o PDF (${response.status}).`;
+
       try {
-        const errJson = await response.json();
-        if(errJson && errJson.detail) errorMsg = errJson.detail;
-        else if(errJson && errJson.message) errorMsg = errJson.message;
-        else if(errJson && errJson.error) errorMsg = errJson.error;
-      } catch(e){}
-      throw new Error(errorMsg);
+        const errorData = await response.json();
+        if (errorData.detail) message = errorData.detail;
+      } catch (e) {}
+
+      throw new Error(message);
     }
 
     const data = await response.json();
     const extractedText = (data.text || '').trim();
+    const pageCount = Number(data.pages);
 
-    if(!extractedText) {
-      throw new Error('Não foi encontrado texto selecionável neste PDF. Verifique se o documento contém texto ou se é apenas uma digitalização.');
+    if (!extractedText) {
+      throw new Error(
+        'Não foi encontrado texto selecionável neste PDF. Verifique se o documento contém texto ou se é apenas uma digitalização.'
+      );
     }
 
-    // Etapa 2: enviar o texto extraído ao Gemini para gerar o resumo
-    $('status').textContent = 'Texto extraído! Gerando resumo inteligente com IA...';
+    if (!Number.isInteger(pageCount) || pageCount < 1 || pageCount > 10) {
+      throw new Error(
+        'Não foi possível confirmar a quantidade de páginas permitida para análise.'
+      );
+    }
+
+    // ETAPA 2: GERAÇÃO DO RESUMO
+
+    $('status').textContent =
+      'Texto extraído! Gerando resumo inteligente com IA...';
 
     const summaryResponse = await fetch(SUMMARY_URL, {
       method: 'POST',
-      headers: {'Content-Type': 'application/json'},
+      headers: {
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify({
         filename: data.filename || selectedFile.name,
-        text: extractedText
+        text: extractedText,
+        pages: pageCount
       })
     });
 
-    if(!summaryResponse.ok) {
-      let summaryError = `Erro ao gerar resumo (${summaryResponse.status} ${summaryResponse.statusText})`;
+    if (!summaryResponse.ok) {
+      let message = `Erro ao gerar resumo (${summaryResponse.status}).`;
+
       try {
-        const errJson = await summaryResponse.json();
-        if(errJson && errJson.detail) summaryError = errJson.detail;
-        else if(errJson && errJson.message) summaryError = errJson.message;
-        else if(errJson && errJson.error) summaryError = errJson.error;
-      } catch(e){}
-      throw new Error(summaryError);
+        const errorData = await summaryResponse.json();
+        if (errorData.detail) message = errorData.detail;
+      } catch (e) {}
+
+      throw new Error(message);
     }
 
     const summaryData = await summaryResponse.json();
 
-    // Exibir os dados usando textContent para manter o conteúdo seguro
+    // ETAPA 3: EXIBIÇÃO DOS RESULTADOS
+
     $('result').innerHTML = '';
 
-    const titleEl = document.createElement('strong');
-    titleEl.textContent = 'Documento analisado com sucesso!';
-    $('result').appendChild(titleEl);
+    const title = document.createElement('strong');
+    title.textContent = 'Documento analisado com sucesso!';
+    $('result').appendChild(title);
     $('result').appendChild(document.createElement('br'));
 
-    const infoEl = document.createElement('div');
-    infoEl.style.marginTop = '8px';
-    const fileStrong = document.createElement('strong');
-    fileStrong.textContent = 'Arquivo: ';
-    const fileValue = document.createElement('span');
-    fileValue.textContent = data.filename || selectedFile.name;
-    const pagesBreak = document.createElement('br');
-    const pagesStrong = document.createElement('strong');
-    pagesStrong.textContent = 'Páginas: ';
-    const pagesValue = document.createElement('span');
-    pagesValue.textContent = data.pages !== undefined ? data.pages : 'N/A';
-    infoEl.append(fileStrong, fileValue, pagesBreak, pagesStrong, pagesValue);
-    $('result').appendChild(infoEl);
+    const info = document.createElement('div');
+    info.style.marginTop = '8px';
+
+    const filename = document.createElement('span');
+    filename.textContent = 'Arquivo: ' +
+      (data.filename || selectedFile.name);
+
+    const pages = document.createElement('span');
+    pages.textContent = 'Páginas: ' + pageCount;
+
+    info.append(filename, document.createElement('br'), pages);
+    $('result').appendChild(info);
 
     const summaryLabel = document.createElement('div');
     summaryLabel.style.marginTop = '16px';
+
     const summaryHeading = document.createElement('strong');
     summaryHeading.textContent = '✦ Resumo inteligente:';
+
     summaryLabel.appendChild(summaryHeading);
     $('result').appendChild(summaryLabel);
 
     const summaryBox = document.createElement('div');
     summaryBox.className = 'summary-box';
-    summaryBox.textContent = summaryData.summary || 'A IA não retornou um resumo.';
+    summaryBox.textContent =
+      summaryData.summary || 'A IA não retornou um resumo.';
+
     $('result').appendChild(summaryBox);
 
     const textLabel = document.createElement('div');
     textLabel.style.marginTop = '16px';
+
     const textHeading = document.createElement('strong');
     textHeading.textContent = 'Texto extraído (conteúdo original):';
+
     textLabel.appendChild(textHeading);
     $('result').appendChild(textLabel);
 
     const textBox = document.createElement('div');
     textBox.className = 'extracted-text-box';
     textBox.textContent = extractedText;
+
     $('result').appendChild(textBox);
 
     $('result').classList.add('show');
-    $('status').textContent = 'Análise e resumo concluídos com sucesso!';
-  } catch (err) {
-    $('result').innerHTML = '';
-    const errTitle = document.createElement('strong');
-    errTitle.style.color = '#f39aab';
-    errTitle.textContent = 'Não foi possível concluir a análise:';
-    $('result').appendChild(errTitle);
-    $('result').appendChild(document.createElement('br'));
+    $('status').textContent =
+      'Análise e resumo concluídos com sucesso!';
 
-    const errText = document.createElement('span');
-    errText.textContent = err.message || 'Falha na conexão com o servidor. Verifique sua conexão e tente novamente.';
-    $('result').appendChild(errText);
+  } catch (error) {
+    showError(
+      error.message ||
+      'Falha na conexão com o servidor. Verifique sua conexão e tente novamente.'
+    );
 
-    $('result').classList.add('show');
-    $('status').textContent = 'Erro no processamento.';
   } finally {
     isProcessing = false;
     $('analyze').disabled = !selectedFile;
@@ -224,19 +425,28 @@ $('analyze').addEventListener('click', async ()=>{
   }
 });
 
-$('chatform').addEventListener('submit',e=>{
+// CHAT EM MODO DEMONSTRAÇÃO
+
+$('chatform').addEventListener('submit', e => {
   e.preventDefault();
-  let q=$('question').value.trim();
-  if(!q)return;
-  let u=document.createElement('div');
-  u.className='bubble user';
-  u.textContent='Você: '+q;
-  $('messages').appendChild(u);
-  let a=document.createElement('div');
-  a.className='bubble';
-  a.textContent='A IA será ativada quando conectarmos o recurso de perguntas ao backend do DocuMind.';
-  $('messages').appendChild(a);
-  $('question').value=''
+
+  const question = $('question').value.trim();
+  if (!question) return;
+
+  const userMessage = document.createElement('div');
+  userMessage.className = 'bubble user';
+  userMessage.textContent = 'Você: ' + question;
+
+  $('messages').appendChild(userMessage);
+
+  const assistantMessage = document.createElement('div');
+  assistantMessage.className = 'bubble';
+  assistantMessage.textContent =
+    'A IA será ativada quando conectarmos o recurso de perguntas ao backend do DocuMind.';
+
+  $('messages').appendChild(assistantMessage);
+
+  $('question').value = '';
 });
 </script>
 </body>
