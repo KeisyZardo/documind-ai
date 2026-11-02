@@ -7,6 +7,7 @@ from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from google import genai
+from groq import AsyncGroq
 
 
 app = FastAPI(
@@ -31,6 +32,25 @@ def home():
 class SummaryRequest(BaseModel):
     text: str
     filename: str = "Documento PDF"
+
+
+def is_temporary_error(error):
+    error_text = str(error).upper()
+
+    temporary_codes = [
+        "429",
+        "500",
+        "502",
+        "503",
+        "504",
+        "UNAVAILABLE",
+        "RESOURCE_EXHAUSTED",
+        "DEADLINE_EXCEEDED",
+        "TIMEOUT",
+        "CONNECTION"
+    ]
+
+    return any(code in error_text for code in temporary_codes)
 
 
 @app.post("/api/extract")
@@ -91,9 +111,9 @@ async def extract_pdf(file: UploadFile = File(...)):
 @app.post("/api/summarize")
 async def summarize_document(request: SummaryRequest):
 
-    api_key = os.getenv("GEMINI_API_KEY")
+    gemini_key = os.getenv("GEMINI_API_KEY")
 
-    if not api_key:
+    if not gemini_key:
         raise HTTPException(
             status_code=500,
             detail="Chave do Gemini não configurada."
@@ -111,37 +131,36 @@ async def summarize_document(request: SummaryRequest):
             detail="Documento muito extenso para esta versão."
         )
 
+    prompt = (
+        "Você é o assistente de análise de documentos do DocuMind AI. "
+        "Produza um resumo objetivo, equilibrado e fácil de entender.\n\n"
+
+        "ESTRUTURA OBRIGATÓRIA:\n"
+        "1. TEMA CENTRAL: explique o assunto em até 2 frases.\n"
+        "2. PONTOS PRINCIPAIS: apresente de 3 a 5 tópicos "
+        "com as informações essenciais.\n"
+        "3. CONCLUSÃO: finalize em até 2 frases.\n\n"
+
+        "REGRAS:\n"
+        "- Escreva aproximadamente 100 a 150 palavras no total.\n"
+        "- Seja direto e evite explicações longas.\n"
+        "- Elimine repetições e detalhes secundários.\n"
+        "- Preserve os fatos mais importantes.\n"
+        "- Não invente informações.\n"
+        "- Não reproduza CPF, e-mail, telefone ou endereço, "
+        "a menos que sejam indispensáveis para compreender o documento.\n"
+        "- Não revele dados pessoais desnecessariamente.\n"
+        "- Responda em português do Brasil.\n\n"
+
+        f"Documento: {request.filename}\n\n"
+        f"Conteúdo:\n{request.text}"
+    )
+
     try:
-        client = genai.Client(api_key=api_key)
+        # PRIMEIRO PROVEDOR: GEMINI
 
-        prompt = (
-            "Você é o assistente de análise de documentos do DocuMind AI. "
-            "Produza um resumo objetivo, equilibrado e fácil de entender.\n\n"
+        client = genai.Client(api_key=gemini_key)
 
-            "ESTRUTURA OBRIGATÓRIA:\n"
-            "1. TEMA CENTRAL: explique o assunto em até 2 frases.\n"
-            "2. PONTOS PRINCIPAIS: apresente de 3 a 5 tópicos "
-            "com as informações essenciais.\n"
-            "3. CONCLUSÃO: finalize em até 2 frases.\n\n"
-
-            "REGRAS:\n"
-            "- Escreva aproximadamente 100 a 150 palavras no total.\n"
-            "- Seja direto e evite explicações longas.\n"
-            "- Elimine repetições e detalhes secundários.\n"
-            "- Preserve os fatos mais importantes.\n"
-            "- Não invente informações.\n"
-            "- Não reproduza CPF, e-mail, telefone ou endereço, "
-            "a menos que sejam indispensáveis para compreender o documento.\n"
-            "- Não revele dados pessoais desnecessariamente.\n"
-            "- Responda em português do Brasil.\n\n"
-
-            f"Documento: {request.filename}\n\n"
-            f"Conteúdo:\n{request.text}"
-        )
-
-        response = None
-
-        # Até 3 tentativas em caso de instabilidade temporária
         for attempt in range(3):
 
             try:
@@ -154,57 +173,85 @@ async def summarize_document(request: SummaryRequest):
                     }
                 )
 
-                break
+                summary = response.text
+
+                if not summary:
+                    raise ValueError(
+                        "O Gemini não retornou um resumo."
+                    )
+
+                print("Resumo gerado pelo Gemini.")
+
+                return {
+                    "filename": request.filename,
+                    "summary": summary,
+                    "provider": "gemini"
+                }
 
             except Exception as e:
 
-                error_text = str(e).upper()
-
-                temporary_error = any(
-                    code in error_text
-                    for code in [
-                        "503",
-                        "429",
-                        "UNAVAILABLE",
-                        "RESOURCE_EXHAUSTED",
-                        "504",
-                        "DEADLINE_EXCEEDED"
-                    ]
-                )
-
-                if not temporary_error or attempt == 2:
+                if not is_temporary_error(e):
                     raise
 
-                wait_seconds = 2 * (attempt + 1)
-
                 print(
-                    f"Gemini temporariamente indisponível. "
-                    f"Tentativa {attempt + 1} falhou. "
-                    f"Nova tentativa em {wait_seconds} segundos."
+                    f"Gemini indisponível. "
+                    f"Tentativa {attempt + 1} de 3."
                 )
 
-                await asyncio.sleep(wait_seconds)
+                if attempt < 2:
+                    await asyncio.sleep(2 * (attempt + 1))
 
-        summary = response.text
+                else:
+                    print(
+                        "Limite de tentativas do Gemini atingido. "
+                        "Acionando provedor reserva."
+                    )
+
+        # SEGUNDO PROVEDOR: GROQ
+
+        groq_key = os.getenv("GROQ_API_KEY")
+
+        if not groq_key:
+            raise RuntimeError(
+                "Gemini indisponível e chave do Groq não configurada."
+            )
+
+        groq_client = AsyncGroq(api_key=groq_key)
+
+        groq_response = await groq_client.chat.completions.create(
+            model="openai/gpt-oss-120b",
+            messages=[
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ],
+            max_completion_tokens=500
+        )
+
+        summary = groq_response.choices[0].message.content
 
         if not summary:
             raise ValueError(
-                "O Gemini não retornou um resumo."
+                "O Groq não retornou um resumo."
             )
+
+        print("Resumo gerado pelo Groq.")
 
         return {
             "filename": request.filename,
-            "summary": summary
+            "summary": summary,
+            "provider": "groq"
         }
 
     except Exception as e:
 
-        print("ERRO GEMINI:", repr(e))
+        print("ERRO NA GERAÇÃO DO RESUMO:", repr(e))
 
         raise HTTPException(
             status_code=502,
             detail=(
-                "Não foi possível gerar o resumo com o Gemini. "
+                "Não foi possível gerar o resumo neste momento. "
                 "Tente novamente em instantes."
             )
         )
