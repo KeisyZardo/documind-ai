@@ -1,7 +1,11 @@
 
+import os
+
+import fitz
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-import fitz
+from pydantic import BaseModel
+from google import genai
 
 app = FastAPI(
     title="DocuMind AI",
@@ -17,9 +21,13 @@ app.add_middleware(
 
 @app.get("/")
 def home():
-    return {
-        "message": "DocuMind AI está funcionando!"
-    }
+    return {"message": "DocuMind AI está funcionando!"}
+
+
+class SummaryRequest(BaseModel):
+    text: str
+    filename: str = "Documento PDF"
+
 
 @app.post("/api/extract")
 async def extract_pdf(file: UploadFile = File(...)):
@@ -43,10 +51,10 @@ async def extract_pdf(file: UploadFile = File(...)):
             filetype="pdf"
         )
 
+        pages = len(document)
         text = "\n".join(
             page.get_text() for page in document
         )
-
         document.close()
 
         if not text.strip():
@@ -57,10 +65,7 @@ async def extract_pdf(file: UploadFile = File(...)):
 
         return {
             "filename": file.filename,
-            "pages": len(fitz.open(
-                stream=content,
-                filetype="pdf"
-            )),
+            "pages": pages,
             "text": text
         }
 
@@ -72,4 +77,58 @@ async def extract_pdf(file: UploadFile = File(...)):
             status_code=400,
             detail="Não foi possível ler este PDF."
         )
-      
+
+
+@app.post("/api/summarize")
+async def summarize_document(request: SummaryRequest):
+    api_key = os.getenv("GEMINI_API_KEY")
+
+    if not api_key:
+        raise HTTPException(
+            status_code=500,
+            detail="Chave do Gemini não configurada."
+        )
+
+    if not request.text.strip():
+        raise HTTPException(
+            status_code=400,
+            detail="O texto do documento está vazio."
+        )
+
+    if len(request.text) > 80000:
+        raise HTTPException(
+            status_code=413,
+            detail="Documento muito extenso para esta versão."
+        )
+
+    try:
+        client = genai.Client(api_key=api_key)
+
+        response = client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=(
+                "Você é o assistente de análise de documentos "
+                "do DocuMind AI. Faça um resumo claro e organizado "
+                "em português do Brasil. Apresente o tema central, "
+                "os pontos mais importantes e uma conclusão. "
+                "Não invente informações que não estejam no texto.\n\n"
+                f"Nome do documento: {request.filename}\n\n"
+                f"Conteúdo:\n{request.text}"
+            )
+        )
+
+        summary = response.text
+
+        if not summary:
+            raise ValueError("O Gemini não retornou um resumo.")
+
+        return {
+            "filename": request.filename,
+            "summary": summary
+        }
+
+    except Exception:
+        raise HTTPException(
+            status_code=502,
+            detail="Não foi possível gerar o resumo com o Gemini."
+        )
